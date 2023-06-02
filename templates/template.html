@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Movie Recomender Sytem</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/books.ico')}}">
+</head>
+<body background="{{ url_for('static', filename='images/bgImg.jpg') }}">
+    <div class="header">
+        Book Recommender System
+    </div>
+
+    <div class="maincontent">
+        <h4 class="books-category">Books For You</h4>
+        <form action="/" method="post">
+            <div class="select box">
+                <select name="bookName" id="format">
+                   <option selected disabled>{{ choice }}</option>
+                   {% for book in freqBooks %}
+                   <option value="{{ book }}">{{ book }}</option>
+                   {% endfor %}
+                </select>
+            </div>
+            <div class="button box">
+                <button class="btn" type="submit">Suggest</button>
+            </div>
+        </form>
+        <br>
+        <h4 class="books-category" style="font-size: 30px;">Suggetions</h4>
+        <section class="books">
+            {% if sugg is none %}
+                <div style="margin-left: 130px; font-size: 20px;">No Input Yet!</div>
+            {% else %}
+                <button class="pre-btn"><img src="{{ url_for('static', filename='images/arrow.png')}}" alt=""></button>
+                <button class="nxt-btn"><img src="{{ url_for('static', filename='images/arrow.png')}}" alt=""></button>
+                <div class="books-container">
+                    {% for index, row in sugg.iterrows() %}
+                    <div class="books-card">
+                        <div class="books-image">
+                            <img src="{{ row['Image-URL-L'] }}" class="books-thumb" alt="{{ row['Book-Title'] }} image not found! " height="100%" width="100%">
+                        </div>
+                        <div class="books-info">
+                            <p><span style="color: darkred">ISBN - {{ row["ISBN"] }}</span></p> 
+                            <p>Published by <span style="color: darkgreen">{{ row['Publisher'] }}</span> ({{ row["Year-Of-Publication"] }})</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="books"> 
+            <h4 class="books-category">Popular Items</h4>
+            <button class="pre-btn"><img src="{{ url_for('static', filename='images/arrow.png')}}" alt=""></button>
+            <button class="nxt-btn"><img src="{{ url_for('static', filename='images/arrow.png')}}" alt=""></button>
+            <div class="books-container">
+
+                {% for index, row in popbook.iterrows() %}
+                <div class="books-card">
+                    <div class="books-image">
+                        <img src="{{ row['Image-URL-L'] }}" class="books-thumb" alt="{{ row['Book-Title'] }} image not found! " height="100%" width="100%">
+                    </div>
+                    <div class="books-info">
+                        <p><span style="color: darkred">ISBN - {{ row["ISBN"] }}</span></p>
+                        <p>Published by <span style="color: darkgreen">{{ row['Publisher'] }}</span> ({{ row["Year-Of-Publication"] }})</p>
+                        <img src="{{ url_for('static', filename='images/star.png') }}" alt="Star" width="20" height="20">
+                        <div class="star">{{ row['avg_ratings'] }}</div>
+                        <img style="margin-left: 10px;" src="{{ url_for('static', filename='images/likes.png') }}" alt="Star" width="20" height="20">
+                        <div class="star">{{ row['nvotes'] }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
